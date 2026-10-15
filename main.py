@@ -80,13 +80,19 @@ SELECT
 employees.employeeNumber,
 employees.firstName,
 employees.lastName,
-COUNT(customers.customerNumber) AS num_customers
+customer_summary.num_customers
 FROM employees
-JOIN customers
-ON employees.employeeNumber = customers.salesRepEmployeeNumber
-GROUP BY employees.employeeNumber, employees.firstName, employees.lastName
-HAVING AVG(customers.creditLimit) > 90000
-ORDER BY num_customers DESC;
+JOIN (
+    SELECT
+    salesRepEmployeeNumber,
+    COUNT(customerNumber) AS num_customers,
+    AVG(creditLimit) AS avg_credit_limit
+    FROM customers
+    GROUP BY salesRepEmployeeNumber
+    HAVING AVG(creditLimit) > 90000
+) AS customer_summary
+ON employees.employeeNumber = customer_summary.salesRepEmployeeNumber
+ORDER BY customer_summary.num_customers DESC;
 """, conn)
 
 # STEP 7
