@@ -12,8 +12,11 @@ pd.read_sql("""SELECT * FROM sqlite_master""", conn)
 # STEP 1
 # Replace None with your code
 df_boston = pd.read_sql("""
-SELECT firstName, lastName , jobTitle 
-FROM employees WHERE officeCode = 'Boston';
+SELECT employees.firstName, employees.lastName , employees.jobTitle 
+FROM employees 
+JOIN officeS
+ON employees.officeCode = offices.officeCode
+WHERE offices.city = 'Boston';
 """, conn)
 
 # STEP 2
@@ -135,7 +138,7 @@ GROUP BY offices.officeCode, offices.city;
 # STEP 10
 # Replace None with your code
 df_under_20 = pd.read_sql("""
-SELECT 
+SELECT DISTINCT
 employees.employeeNumber,
 employees.firstName,
 employees.lastName,
