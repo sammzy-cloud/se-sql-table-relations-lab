@@ -12,9 +12,9 @@ pd.read_sql("""SELECT * FROM sqlite_master""", conn)
 # STEP 1
 # Replace None with your code
 df_boston = pd.read_sql("""
-SELECT employees.firstName, employees.lastName , employees.jobTitle 
+SELECT employees.firstName, employees.lastName  
 FROM employees 
-JOIN officeS
+JOIN offices
 ON employees.officeCode = offices.officeCode
 WHERE offices.city = 'Boston';
 """, conn)
@@ -58,7 +58,6 @@ WHERE orders.orderNumber IS NULL
 ORDER BY customers.contactLastName;
 """, conn)
 
-print(df_contacts)
 
 # STEP 5
 # Replace None with your code
@@ -81,13 +80,13 @@ SELECT
 employees.employeeNumber,
 employees.firstName,
 employees.lastName,
-COUNT(customers.customerNumber) AS numcustomers
+COUNT(customers.customerNumber) AS num_customers
 FROM employees
 JOIN customers
 ON employees.employeeNumber = customers.salesRepEmployeeNumber
 GROUP BY employees.employeeNumber, employees.firstName, employees.lastName
-HAVING AVG(CAST(customers.creditLimit AS REAL)) > 90000
-ORDER BY numcustomers DESC;
+HAVING AVG(customers.creditLimit) > 90000
+ORDER BY num_customers DESC;
 """, conn)
 
 # STEP 7
@@ -162,6 +161,6 @@ GROUP BY productCode
 HAVING COUNT(DISTINCT orders.customerNumber) < 20
 );
 """, conn)
-print(df_under_20)
+
 
 conn.close()
